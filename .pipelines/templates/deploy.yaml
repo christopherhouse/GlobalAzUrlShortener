@@ -11,6 +11,9 @@ parameters:
 - name: regions
   type: object
   default: []
+- name: resourceGroupRegion
+  type: string
+  default: ''
 
 stages:
  - stage: Deploy_To_${{ parameters.environmentName }}
@@ -46,6 +49,7 @@ stages:
               csmParametersFile: $(parameterFile)
               deploymentMode: Incremental
               deploymentName: ${{ parameters.baseName }}-infra
+              location: ${{ parameters.resourceGroupRegion }}
 
           - ${{ each region in parameters.regions }}:
             # Deploy function app

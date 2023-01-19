@@ -28,6 +28,7 @@ stages:
      resourceGroupName: 'URL-SHORTENER-DEV'
      baseName: 'cmhurldev'
      regions: ['eastus', 'westeurope']
+     resourceGroupRegion: 'eastus'
 
  - template: templates/deploy.yaml
    parameters:
@@ -36,6 +37,7 @@ stages:
      resourceGroupName: 'URL-SHORTENER-QA'
      baseName: 'cmhurlqa'
      regions: ['eastus', 'westeurope']
+     resourceGroupRegion: 'eastus'
 
  - template: templates/deploy.yaml
    parameters:
@@ -44,3 +46,4 @@ stages:
      resourceGroupName: 'URL-SHORTENER-PRD'
      baseName: 'cmhurlprd'
      regions: ['eastus', 'westeurope']
+     resourceGroupRegion: 'eastus'
