@@ -48,7 +48,7 @@ stages:
               csmFile: $(infraTemplate)
               csmParametersFile: $(parameterFile)
               deploymentMode: Incremental
-              deploymentName: ${{ parameters.baseName }}-infra
+              deploymentName: $(Build.BuildId)
               location: ${{ parameters.resourceGroupRegion }}
 
           - ${{ each region in parameters.regions }}:
