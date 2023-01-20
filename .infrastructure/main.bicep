@@ -60,7 +60,7 @@ module functionApps './modules/functionApp.bicep' = [for (location, i) in region
   }
 }]
 
-module frontDooor './modules/frontDoor.bicep' = if (deployFrontDoor) {
+module frontDoor './modules/frontDoor.bicep' = if (deployFrontDoor) {
   name: frontDoorDeploymentName
   params: {
     frontDoorName: frontDoorName

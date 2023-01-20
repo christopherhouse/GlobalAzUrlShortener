@@ -5,7 +5,7 @@ param defaultRedirectUrl string
 param cosmosDbAccountName string
 param cosmosDbResourceId string
 param cosmosDbApiVersion string
-param frontDoorId string
+// param frontDoorId string
 param location string
 
 var cosmosDbKey = listKeys(cosmosDbResourceId, cosmosDbApiVersion).primaryMasterKey
@@ -80,20 +80,20 @@ resource funcApp 'Microsoft.Web/sites@2022-03-01' = {
           value: defaultRedirectUrl
         }
       ]
-      ipSecurityRestrictions: [
-        {
-          tag: 'ServiceTag'
-          ipAddress: 'AzureFrontDoor.Backend'
-          action: 'Allow'
-          priority: 100
-          headers: {
-            'x-azure-fdid': [
-              frontDoorId
-            ]
-          }
-          name: 'Allow Azure Front Door'
-        }
-      ]
+      // ipSecurityRestrictions: [
+      //   {
+      //     tag: 'ServiceTag'
+      //     ipAddress: 'AzureFrontDoor.Backend'
+      //     action: 'Allow'
+      //     priority: 100
+      //     headers: {
+      //       'x-azure-fdid': [
+      //         frontDoorId
+      //       ]
+      //     }
+      //     name: 'Allow Azure Front Door'
+      //   }
+      // ]
     }
     serverFarmId: funcHhostingPlan.id
     use32BitWorkerProcess: true
