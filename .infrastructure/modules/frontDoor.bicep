@@ -71,6 +71,9 @@ resource frontDoorRoute 'Microsoft.Cdn/profiles/afdEndpoints/routes@2022-11-01-p
     forwardingProtocol: 'HttpOnly'
     linkToDefaultDomain: 'Enabled'
     httpsRedirect: 'Enabled'
+    cacheConfiguration: {
+      queryStringCachingBehavior: 'IgnoreQueryString'
+    }
   }
   dependsOn: [
     frontDoorOrigin
