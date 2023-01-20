@@ -76,3 +76,5 @@ resource frontDoorRoute 'Microsoft.Cdn/profiles/afdEndpoints/routes@2022-11-01-p
     frontDoorOrigin
   ]
 }
+
+output frontDoorId string = frontDoorProfile.properties.frontDoorId
