@@ -21,7 +21,7 @@ param buildId string
 param sharedResourceRegion string = 'eastus'
 
 var UrlsStorageAccountName = '${baseName}urlstorage'
-var functionAcount = length(regions)
+var functionsCount = length(regions)
 var appInsightsDeploymentName = '${baseName}-${sharedResourceRegion}-ai-${buildId}'
 var functionAppNames = [for location in regions: '${baseName}-${location}']
 var trafficManagerProfileName = '${baseName}-atm'
@@ -69,6 +69,7 @@ module frontDoor './modules/frontDoor.bicep' = if (loadBalancerOption == 'Premiu
     frontDoorName: frontDoorName
     functionAppHostNames: functionAppNames
     frontDoorSku: loadBalancerOption
+    functionAppResourceIds: [for i in range(0, functionsCount): functionApps[i].outputs.id]
   }
   dependsOn: [
     functionApps
@@ -95,4 +96,4 @@ module cosmosDb './modules/cosmosDb.bicep' = {
   }
 }
 
-output functionAppNames array = [for i in range(0, functionAcount): '${functionApps[i].name}']
+output functionAppNames array = [for i in range(0, functionsCount): '${functionApps[i].name}']

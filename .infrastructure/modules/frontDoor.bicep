@@ -1,12 +1,14 @@
 param frontDoorName string
 param frontDoorSku string
 param functionAppHostNames array
+param functionAppResourceIds array
 
 var profileName = '${frontDoorName}-profile'
 var endpointName = '${frontDoorName}-endpoint'
 var originName = '${frontDoorName}-origingroup'
 
 var hostNames = [for functionApp in functionAppHostNames: '${functionApp}-fa.azurewebsites.net']
+
 
 resource frontDoorProfile 'Microsoft.Cdn/profiles@2022-11-01-preview' = {
   name: profileName
@@ -46,6 +48,9 @@ resource frontDoorOrigin 'Microsoft.Cdn/profiles/originGroups/origins@2022-11-01
   name: functionAppHostNames[i]
   parent: originGroup
   properties: {
+    azureOrigin: {
+      id: functionAppResourceIds[i]
+    }
     hostName: hostName
     httpPort: 80
     httpsPort: 443
