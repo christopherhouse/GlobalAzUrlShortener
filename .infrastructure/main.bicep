@@ -9,9 +9,11 @@ param regions array = [
   'eastus'
 ]
 
-@allowed(['Premium_AzureFrontDoor'
-'Standard_AzureFrontDoor'
-'TrafficManager'])
+@allowed([
+  'Premium_AzureFrontDoor'
+  'Premium_AzureFrontDoor_With_WAF'
+  'Standard_AzureFrontDoor'
+  'TrafficManager'])
 param loadBalancerOption string
 
 @description('The build ID that deploys this template')
@@ -27,6 +29,24 @@ var functionAppNames = [for location in regions: '${baseName}-${location}']
 var trafficManagerProfileName = '${baseName}-atm'
 var frontDoorName = '${baseName}-afd'
 var frontDoorDeploymentName= '${baseName}-${frontDoorName}-fd-${buildId}'
+var deployFrontDoor = loadBalancerOption == 'Premium_AzureFrontDoor' || loadBalancerOption == 'Standard_AzureFrontDoor' || loadBalancerOption == 'Premium_AzureFrontDoor_With_WAF' ? true : false
+var frontDoorSkuMap = [
+  { optionName: 'Standared_AzureFrontDoor'
+    skuName: 'Standard_AzureFrontDoor'
+  }
+  { optionName: 'Premium_AzureFrontDoor'
+    skuName: 'Premium_AzureFrontDoor'
+    skuTier: 'Premium'
+  }
+  { optionName: 'Premium_AzureFrontDoor_With_WAF'
+    skuName: 'Premium_AzureFrontDoor'
+    skuTier: 'Premium'
+  }
+]
+
+var frontDoorSku = loadBalancerOption == 'TrafficManager'? frontDoorSkuMap[0].skuName : filter(frontDoorSkuMap, (sku) => sku.optionName == loadBalancerOption)[0].skName
+
+
 var cosmosAccountName = '${baseName}-cdb'
 var cosmosDeploymentName = '${cosmosAccountName}-${buildId}'
 var trafficManagerProfileDeploymentName = '${trafficManagerProfileName}-${buildId}'
@@ -63,12 +83,12 @@ module functionApps './modules/functionApp.bicep' = [for (location, i) in region
   }
 }]
 
-module frontDoor './modules/frontDoor.bicep' = if (loadBalancerOption == 'Premium_AzureFrontDoor' || loadBalancerOption == 'Standard_AzureFrontDoor') {
+module frontDoor './modules/frontDoor.bicep' = if (deployFrontDoor) {
   name: frontDoorDeploymentName
   params: {
     frontDoorName: frontDoorName
     functionAppHostNames: functionAppNames
-    frontDoorSku: loadBalancerOption
+    frontDoorSku: frontDoorSku
     functionAppResourceIds: [for i in range(0, functionsCount): functionApps[i].outputs.id]
   }
   dependsOn: [

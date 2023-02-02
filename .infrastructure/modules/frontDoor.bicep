@@ -1,4 +1,9 @@
 param frontDoorName string
+@allowed([
+  'Standard_AzureFrontDoor'
+  'Premium_AzureFrontDoor'
+  'Premium_AzureFrontDoor_With_WAF'
+])
 param frontDoorSku string
 param functionAppHostNames array
 param functionAppResourceIds array
@@ -6,6 +11,7 @@ param functionAppResourceIds array
 var profileName = '${frontDoorName}-profile'
 var endpointName = '${frontDoorName}-endpoint'
 var originName = '${frontDoorName}-origingroup'
+var sku = frontDoorSku == 'Standard_AzureFrontDoor' ? 'Standard_AzureFrontDoor' : 'Premium_AzureFrontDoor'
 
 var hostNames = [for functionApp in functionAppHostNames: '${functionApp}-fa.azurewebsites.net']
 
@@ -14,7 +20,7 @@ resource frontDoorProfile 'Microsoft.Cdn/profiles@2022-11-01-preview' = {
   name: profileName
   location: 'global'
   sku: {
-    name: frontDoorSku
+    name: sku
   }
 }
 
