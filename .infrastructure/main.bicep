@@ -30,7 +30,7 @@ var trafficManagerProfileName = '${baseName}-atm'
 var frontDoorName = '${baseName}-afd'
 var frontDoorDeploymentName= '${baseName}-${frontDoorName}-fd-${buildId}'
 var deployFrontDoor = loadBalancerOption == 'Premium_AzureFrontDoor' || loadBalancerOption == 'Standard_AzureFrontDoor' || loadBalancerOption == 'Premium_AzureFrontDoor_With_WAF' ? true : false
-var frontDoorSkuMap = [
+param frontDoorSkuMap array = [
   { optionName: 'Standared_AzureFrontDoor'
     skuName: 'Standard_AzureFrontDoor'
   }
