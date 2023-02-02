@@ -30,6 +30,7 @@ var trafficManagerProfileName = '${baseName}-atm'
 var frontDoorName = '${baseName}-afd'
 var frontDoorDeploymentName= '${baseName}-${frontDoorName}-fd-${buildId}'
 var deployFrontDoor = loadBalancerOption == 'Premium_AzureFrontDoor' || loadBalancerOption == 'Standard_AzureFrontDoor' || loadBalancerOption == 'Premium_AzureFrontDoor_With_WAF' ? true : false
+var deployWAF = loadBalancerOption == 'Premium_AzureFrontDoor_With_WAF' ? true : false
 var isStandardFrontDoor = contains(loadBalancerOption, 'Standard')
 var frontDoorSku = isStandardFrontDoor ? 'Standard_AzureFrontDoor' : 'Premium_AzureFrontDoor'
 
@@ -75,6 +76,7 @@ module frontDoor './modules/frontDoor.bicep' = if (deployFrontDoor) {
     frontDoorName: frontDoorName
     functionAppHostNames: functionAppNames
     frontDoorSku: frontDoorSku
+    deployWAF: deployWAF
   }
   dependsOn: [
     functionApps

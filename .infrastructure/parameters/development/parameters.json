@@ -18,7 +18,7 @@
         "value": "eastus"
       },
       "loadBalancerOption": {
-        "value": "Standard_AzureFrontDoor"
+        "value": "Premium_AzureFrontDoor_With_WAF"
       }
     }
   }
