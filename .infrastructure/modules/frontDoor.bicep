@@ -6,7 +6,6 @@ param frontDoorName string
 ])
 param frontDoorSku string
 param functionAppHostNames array
-param functionAppResourceIds array
 
 var profileName = '${frontDoorName}-profile'
 var endpointName = '${frontDoorName}-endpoint'
@@ -54,9 +53,6 @@ resource frontDoorOrigin 'Microsoft.Cdn/profiles/originGroups/origins@2022-11-01
   name: functionAppHostNames[i]
   parent: originGroup
   properties: {
-    azureOrigin: {
-      id: functionAppResourceIds[i]
-    }
     hostName: hostName
     httpPort: 80
     httpsPort: 443

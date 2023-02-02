@@ -75,7 +75,6 @@ module frontDoor './modules/frontDoor.bicep' = if (deployFrontDoor) {
     frontDoorName: frontDoorName
     functionAppHostNames: functionAppNames
     frontDoorSku: frontDoorSku
-    functionAppResourceIds: [for i in range(0, functionsCount): functionApps[i].outputs.id]
   }
   dependsOn: [
     functionApps
