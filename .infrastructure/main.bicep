@@ -30,22 +30,8 @@ var trafficManagerProfileName = '${baseName}-atm'
 var frontDoorName = '${baseName}-afd'
 var frontDoorDeploymentName= '${baseName}-${frontDoorName}-fd-${buildId}'
 var deployFrontDoor = loadBalancerOption == 'Premium_AzureFrontDoor' || loadBalancerOption == 'Standard_AzureFrontDoor' || loadBalancerOption == 'Premium_AzureFrontDoor_With_WAF' ? true : false
-param frontDoorSkuMap array = [
-  { optionName: 'Standared_AzureFrontDoor'
-    skuName: 'Standard_AzureFrontDoor'
-  }
-  { optionName: 'Premium_AzureFrontDoor'
-    skuName: 'Premium_AzureFrontDoor'
-    skuTier: 'Premium'
-  }
-  { optionName: 'Premium_AzureFrontDoor_With_WAF'
-    skuName: 'Premium_AzureFrontDoor'
-    skuTier: 'Premium'
-  }
-]
-
-var frontDoorSku = loadBalancerOption == 'TrafficManager'? 'Standard_AzureFrontDoor' : filter(frontDoorSkuMap, (sku) => sku.optionName == loadBalancerOption)[0].skName
-
+var isStandardFrontDoor = contains(loadBalancerOption, 'Standard')
+var frontDoorSku = isStandardFrontDoor ? 'Standard_AzureFrontDoor' : 'Premium_AzureFrontDoor'
 
 var cosmosAccountName = '${baseName}-cdb'
 var cosmosDeploymentName = '${cosmosAccountName}-${buildId}'
