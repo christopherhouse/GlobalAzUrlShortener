@@ -44,7 +44,7 @@ var frontDoorSkuMap = [
   }
 ]
 
-var frontDoorSku = loadBalancerOption == 'TrafficManager'? frontDoorSkuMap[0].skuName : filter(frontDoorSkuMap, (sku) => sku.optionName == loadBalancerOption)[0].skName
+var frontDoorSku = loadBalancerOption == 'TrafficManager'? 'Standard_AzureFrontDoor' : filter(frontDoorSkuMap, (sku) => sku.optionName == loadBalancerOption)[0].skName
 
 
 var cosmosAccountName = '${baseName}-cdb'
