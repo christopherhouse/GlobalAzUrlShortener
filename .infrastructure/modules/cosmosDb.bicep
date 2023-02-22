@@ -73,7 +73,7 @@ resource urlDetailsTable 'Microsoft.DocumentDB/databaseAccounts/tables@2022-08-1
     }
     options: {
       autoscaleSettings: {
-        maxThroughput: 4000
+        maxThroughput: 1000
       }
     }
   }
@@ -88,7 +88,7 @@ resource clickStatsTable 'Microsoft.DocumentDB/databaseAccounts/tables@2022-08-1
     }
     options: {
       autoscaleSettings: {
-        maxThroughput: 4000
+        maxThroughput: 1000
       }
     }
   }
