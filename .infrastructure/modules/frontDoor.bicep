@@ -33,6 +33,7 @@ var hostNames = [for functionApp in functionAppHostNames: '${functionApp}-fa.azu
 
 resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@2022-05-01' = if(deployWAF && isPremiumSku) {
   name: '${frontDoorName}-wafpolicy'
+  location: 'global'
   sku: {
     name: 'Premium_AzureFrontDoor'
   }
