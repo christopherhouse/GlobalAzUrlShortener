@@ -28,11 +28,11 @@ var endpointName = '${frontDoorName}-endpoint'
 var originName = '${frontDoorName}-origingroup'
 var sku = frontDoorSku == 'Standard_AzureFrontDoor' ? 'Standard_AzureFrontDoor' : 'Premium_AzureFrontDoor'
 var isPremiumSku = sku == 'Premium_AzureFrontDoor'
-
+var afdName = replace(frontDoorName, '-', '')
 var hostNames = [for functionApp in functionAppHostNames: '${functionApp}-fa.azurewebsites.net']
 
 resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@2022-05-01' = if(deployWAF && isPremiumSku) {
-  name: '${frontDoorName}wafpolicy'
+  name: '${afdName}wafpolicy'
   location: 'global'
   sku: {
     name: 'Premium_AzureFrontDoor'
@@ -49,7 +49,7 @@ resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@20
 }
 
 resource securityPolicy 'Microsoft.Cdn/profiles/securityPolicies@2022-11-01-preview' = if(deployWAF && isPremiumSku) {
-  name: '${frontDoorName}-securitypolicy'
+  name: '${frontDoorName}securitypolicy'
   parent: frontDoorProfile
   properties: {
     parameters: {
