@@ -32,7 +32,7 @@ var isPremiumSku = sku == 'Premium_AzureFrontDoor'
 var hostNames = [for functionApp in functionAppHostNames: '${functionApp}-fa.azurewebsites.net']
 
 resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@2022-05-01' = if(deployWAF && isPremiumSku) {
-  name: '${replace(frontDoorName, '-', '')}
+  name: '${replace(frontDoorName, '-', '')}wafpolicy'
   location: 'global'
   sku: {
     name: 'Premium_AzureFrontDoor'
