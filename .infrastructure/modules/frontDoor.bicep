@@ -14,11 +14,12 @@ param functionAppHostNames array
 param wafMode string = 'Prevention'
 param wafManagedRulesets array = [
   {
-    rulesetType: 'Microsoft_DefaultRuleset'
-    ruleSetVersion: '1.1'
+    rulesetType: 'Microsoft_DefaultRuleSet'
+    ruleSetVersion: '2.0'
+    rulesetAction: 'Block'
   }
   {
-    ruleSetType: 'Microsoft_BotManagerRuleset'
+    ruleSetType: 'Microsoft_BotManagerRuleSet'
     ruleSetVersion: '1.0'
   }
 ]
