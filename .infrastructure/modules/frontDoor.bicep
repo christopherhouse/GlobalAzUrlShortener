@@ -32,7 +32,7 @@ var isPremiumSku = sku == 'Premium_AzureFrontDoor'
 var hostNames = [for functionApp in functionAppHostNames: '${functionApp}-fa.azurewebsites.net']
 
 resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@2022-05-01' = if(deployWAF && isPremiumSku) {
-  name: '${frontDoorName}-wafpolicy'
+  name: '${frontDoorName}wafpolicy'
   location: 'global'
   sku: {
     name: 'Premium_AzureFrontDoor'
@@ -48,32 +48,30 @@ resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@20
   }
 }
 
-output wafPolicyId string = wafPolicy.id
-
-// resource securityPolicy 'Microsoft.Cdn/profiles/securityPolicies@2022-11-01-preview' = if(deployWAF && isPremiumSku) {
-//   name: '${frontDoorName}-securitypolicy'
-//   parent: frontDoorProfile
-//   properties: {
-//     parameters: {
-//       type: 'WebApplicationFirewall'
-//       wafPolicy: {
-//         id: wafPolicy.id
-//       }
-//       associations: [
-//         {
-//           domains: [
-//             {
-//               id: frontDoorEndpoint.id
-//             }
-//           ]
-//           patternsToMatch: [
-//             '/*'
-//           ]
-//         }
-//       ]
-//     }
-//   }
-// }
+resource securityPolicy 'Microsoft.Cdn/profiles/securityPolicies@2022-11-01-preview' = if(deployWAF && isPremiumSku) {
+  name: '${frontDoorName}-securitypolicy'
+  parent: frontDoorProfile
+  properties: {
+    parameters: {
+      type: 'WebApplicationFirewall'
+      wafPolicy: {
+        id: wafPolicy.id
+      }
+      associations: [
+        {
+          domains: [
+            {
+              id: frontDoorEndpoint.id
+            }
+          ]
+          patternsToMatch: [
+            '/*'
+          ]
+        }
+      ]
+    }
+  }
+}
 
 resource frontDoorProfile 'Microsoft.Cdn/profiles@2022-11-01-preview' = {
   name: profileName
