@@ -48,30 +48,30 @@ resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@20
   }
 }
 
-resource securityPolicy 'Microsoft.Cdn/profiles/securityPolicies@2022-11-01-preview' = if(deployWAF && isPremiumSku) {
-  name: '${frontDoorName}-securitypolicy'
-  parent: frontDoorProfile
-  properties: {
-    parameters: {
-      type: 'WebApplicationFirewall'
-      wafPolicy: {
-        id: wafPolicy.id
-      }
-      associations: [
-        {
-          domains: [
-            {
-              id: frontDoorEndpoint.id
-            }
-          ]
-          patternsToMatch: [
-            '/*'
-          ]
-        }
-      ]
-    }
-  }
-}
+// resource securityPolicy 'Microsoft.Cdn/profiles/securityPolicies@2022-11-01-preview' = if(deployWAF && isPremiumSku) {
+//   name: '${frontDoorName}-securitypolicy'
+//   parent: frontDoorProfile
+//   properties: {
+//     parameters: {
+//       type: 'WebApplicationFirewall'
+//       wafPolicy: {
+//         id: wafPolicy.id
+//       }
+//       associations: [
+//         {
+//           domains: [
+//             {
+//               id: frontDoorEndpoint.id
+//             }
+//           ]
+//           patternsToMatch: [
+//             '/*'
+//           ]
+//         }
+//       ]
+//     }
+//   }
+// }
 
 resource frontDoorProfile 'Microsoft.Cdn/profiles@2022-11-01-preview' = {
   name: profileName
