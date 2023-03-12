@@ -15,7 +15,7 @@ param wafMode string = 'Prevention'
 param wafManagedRulesets array = [
   {
     rulesetType: 'Microsoft_DefaultRuleSet'
-    ruleSetVersion: '2.0'
+    ruleSetVersion: '2.1'
     rulesetAction: 'Block'
   }
   {
