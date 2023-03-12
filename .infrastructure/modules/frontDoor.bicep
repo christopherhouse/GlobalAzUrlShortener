@@ -48,6 +48,8 @@ resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@20
   }
 }
 
+output wafPolicyId string = wafPolicy.id
+
 // resource securityPolicy 'Microsoft.Cdn/profiles/securityPolicies@2022-11-01-preview' = if(deployWAF && isPremiumSku) {
 //   name: '${frontDoorName}-securitypolicy'
 //   parent: frontDoorProfile
