@@ -61,11 +61,3 @@ stages:
                 appType: functionApp
                 appName: ${{ parameters.baseName }}-${{ region }}-fa
                 package: $(Pipeline.Workspace)/functionapp/functionapp.zip
-            # - task: AzureCLI@2
-            #   displayName: Deploy Function to ${{ region }}
-            #   inputs:
-            #     azureSubscription: ${{ parameters.serviceConnectionName }}
-            #     scriptType: bash
-            #     scriptLocation: inlineScript
-            #     inlineScript: |
-            #      az functionapp deployment source config-zip -g ${{ parameters.resourceGroupName }} -n ${{ parameters.baseName }}-${{ region }}-fa --src $(Pipeline.Workspace)/functionapp/functionapp.zip

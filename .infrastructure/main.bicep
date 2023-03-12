@@ -9,9 +9,11 @@ param regions array = [
   'eastus'
 ]
 
-@allowed(['Premium_AzureFrontDoor'
-'Standard_AzureFrontDoor'
-'TrafficManager'])
+@allowed([
+  'Premium_AzureFrontDoor'
+  'Premium_AzureFrontDoor_With_WAF'
+  'Standard_AzureFrontDoor'
+  'TrafficManager'])
 param loadBalancerOption string
 
 @description('The build ID that deploys this template')
@@ -21,12 +23,17 @@ param buildId string
 param sharedResourceRegion string = 'eastus'
 
 var UrlsStorageAccountName = '${baseName}urlstorage'
-var functionAcount = length(regions)
+var functionsCount = length(regions)
 var appInsightsDeploymentName = '${baseName}-${sharedResourceRegion}-ai-${buildId}'
 var functionAppNames = [for location in regions: '${baseName}-${location}']
 var trafficManagerProfileName = '${baseName}-atm'
 var frontDoorName = '${baseName}-afd'
 var frontDoorDeploymentName= '${baseName}-${frontDoorName}-fd-${buildId}'
+var deployFrontDoor = loadBalancerOption == 'Premium_AzureFrontDoor' || loadBalancerOption == 'Standard_AzureFrontDoor' || loadBalancerOption == 'Premium_AzureFrontDoor_With_WAF' ? true : false
+var deployWAF = loadBalancerOption == 'Premium_AzureFrontDoor_With_WAF' ? true : false
+var isStandardFrontDoor = contains(loadBalancerOption, 'Standard')
+var frontDoorSku = isStandardFrontDoor ? 'Standard_AzureFrontDoor' : 'Premium_AzureFrontDoor'
+
 var cosmosAccountName = '${baseName}-cdb'
 var cosmosDeploymentName = '${cosmosAccountName}-${buildId}'
 var trafficManagerProfileDeploymentName = '${trafficManagerProfileName}-${buildId}'
@@ -63,12 +70,13 @@ module functionApps './modules/functionApp.bicep' = [for (location, i) in region
   }
 }]
 
-module frontDoor './modules/frontDoor.bicep' = if (loadBalancerOption == 'Premium_AzureFrontDoor' || loadBalancerOption == 'Standard_AzureFrontDoor') {
+module frontDoor './modules/frontDoor.bicep' = if (deployFrontDoor) {
   name: frontDoorDeploymentName
   params: {
     frontDoorName: frontDoorName
     functionAppHostNames: functionAppNames
-    frontDoorSku: loadBalancerOption
+    frontDoorSku: frontDoorSku
+    deployWAF: deployWAF
   }
   dependsOn: [
     functionApps
@@ -95,4 +103,4 @@ module cosmosDb './modules/cosmosDb.bicep' = {
   }
 }
 
-output functionAppNames array = [for i in range(0, functionAcount): '${functionApps[i].name}']
+output functionAppNames array = [for i in range(0, functionsCount): '${functionApps[i].name}']

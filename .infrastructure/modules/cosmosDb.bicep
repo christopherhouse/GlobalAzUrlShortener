@@ -61,5 +61,38 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-08-15' = {
   }
 }
 
+// Create a Cosmos DB table resource with the name UrlsDetails.  Set the throughput to autoscale with minimum 400 RUs and max 4000 RUs.
+// Set the parent resource of the table to be the Cosmos DB account resource.
+
+resource urlDetailsTable 'Microsoft.DocumentDB/databaseAccounts/tables@2022-08-15' = {
+  name: 'UrlsDetails'
+  parent: cosmosAccount
+  properties: {
+    resource: {
+      id: 'UrlsDetails'
+    }
+    options: {
+      autoscaleSettings: {
+        maxThroughput: 1000
+      }
+    }
+  }
+}
+
+resource clickStatsTable 'Microsoft.DocumentDB/databaseAccounts/tables@2022-08-15' = {
+  name: 'ClickStats'
+  parent: cosmosAccount
+  properties: {
+    resource: {
+      id: 'ClickStats'
+    }
+    options: {
+      autoscaleSettings: {
+        maxThroughput: 1000
+      }
+    }
+  }
+}
+
 output id string = cosmosAccount.id
 output apiVersion string = cosmosAccount.apiVersion
